@@ -1,5 +1,7 @@
 package SR.Lab3.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,7 @@ public class Student extends AbstractEntity {
     private String phoneNumber;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "`gr_id`", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Group group;
 
     public String getName() {

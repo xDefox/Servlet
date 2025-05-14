@@ -1,5 +1,7 @@
 package SR.Lab3.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -20,6 +22,7 @@ public class Group extends AbstractEntity {
     private String grName;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "group", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private Set<Student> students;
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
@@ -52,6 +55,7 @@ public class Group extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "GROUP - " + id + ": [name=" + grName + ", students=" + students + "]";
+        return "GROUP - " + id + ": [name=" + grName +
+                ", studentsCount=" + (students != null ? students.size() : 0) + "]";
     }
 }

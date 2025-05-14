@@ -3,6 +3,7 @@ package SR.Lab3.service.impl;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,8 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Student not found with id: " + id));
     }
+
+
 
     @Override
     public List<Student> read() {
@@ -113,5 +116,16 @@ public class StudentServiceImpl implements StudentService {
         }
 
         studentRepository.save(existingStudent);
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<Student> readAllWithGroupAndFacultyInfo() {
+        List<Student> students = studentRepository.findAll();
+        // Инициализируем необходимые связи
+        students.forEach(s -> {
+            Hibernate.initialize(s.getGroup());
+            Hibernate.initialize(s.getGroup().getFaculty());
+        });
+        return students;
     }
 }

@@ -1,14 +1,18 @@
 package SR.Lab3.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "faculties")
-public class Faculty {
+public class Faculty extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "id")
     private Long id;
 
@@ -18,7 +22,8 @@ public class Faculty {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @OneToMany(mappedBy = "faculty", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonManagedReference
+    @OneToMany(mappedBy = "faculty", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private List<Group> groups = new ArrayList<>();
 
     // Конструкторы
@@ -79,7 +84,7 @@ public class Faculty {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
-                ", groupsCount=" + groups.size() +
+                ", groupsCount=" + (groups != null ? groups.size() : 0) +
                 '}';
     }
 }
