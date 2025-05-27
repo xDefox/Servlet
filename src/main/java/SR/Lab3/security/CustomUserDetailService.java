@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService {
@@ -20,17 +21,20 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User userEntity = repository.findByUsername(username);
-        if (userEntity == null) {
+        System.out.println("Trying to load user: " + username); // Добавьте это
+        Optional<User> userEntity = repository.findByUsername(username);
+        if (userEntity.isEmpty()) {
             throw new UsernameNotFoundException("User not found: " + username);
         }
 
-        List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(userEntity.getAuthority()));
+        System.out.println("Found user: " + userEntity.get().getUsername() +
+                " with authority: " + userEntity.get().getAuthority());
 
-        // Используем Spring Security User вместо SR.Lab3.entity.User
+        List<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(userEntity.get().getAuthority()));
+
         return new org.springframework.security.core.userdetails.User(
-                userEntity.getUsername(), userEntity.getPassword(), grantedAuthorities);
+                userEntity.get().getUsername(), userEntity.get().getPassword(), grantedAuthorities);
     }
 
 }

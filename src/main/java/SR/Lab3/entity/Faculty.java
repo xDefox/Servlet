@@ -3,9 +3,10 @@ package SR.Lab3.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "faculties")
@@ -22,9 +23,9 @@ public class Faculty extends AbstractEntity {
     @Column(name = "phone", nullable = false)
     private String phone;
 
+    @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
     @JsonManagedReference
-    @OneToMany(mappedBy = "faculty", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    private List<Group> groups = new ArrayList<>();
+    private Set<Group> groups;
 
     // Конструкторы
     public Faculty() {}
@@ -60,11 +61,11 @@ public class Faculty extends AbstractEntity {
     }
 
     public List<Group> getGroups() {
-        return groups;
+        return (List<Group>) groups;
     }
 
     public void setGroups(List<Group> groups) {
-        this.groups = groups;
+        this.groups = (Set<Group>) groups;
     }
 
     // Методы для управления связями

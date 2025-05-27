@@ -1,6 +1,6 @@
 package SR.Lab3.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")

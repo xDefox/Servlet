@@ -73,7 +73,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> readByGroup(Long groupId) {
+    public List<Student> readByGroup(Group groupId) {
         return studentRepository.findByGroup(groupId);
     }
 
@@ -127,5 +127,10 @@ public class StudentServiceImpl implements StudentService {
             Hibernate.initialize(s.getGroup().getFaculty());
         });
         return students;
+    }
+
+    @Override
+    public List<Student> readByGroup(Long groupId) {
+        return List.of();
     }
 }

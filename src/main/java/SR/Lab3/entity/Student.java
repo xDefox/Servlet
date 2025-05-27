@@ -1,27 +1,25 @@
 package SR.Lab3.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "students")
 public class Student extends AbstractEntity {
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "surname")
+
+    @Column(name = "surname", nullable = false)
     private String surname;
+
     @Column(name = "phone_number")
     private String phoneNumber;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "`gr_id`", nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    @JsonBackReference
     private Group group;
+
 
     public String getName() {
         return name;
@@ -57,6 +55,6 @@ public class Student extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Student  - " + id + ": [name=" + name + ", surname=" + surname + ", phoneNumber=" + phoneNumber + "]";
+        return "Student - " + id + ": [name=" + name + ", surname=" + surname + ", phoneNumber=" + phoneNumber + "]";
     }
 }

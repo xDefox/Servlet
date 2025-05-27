@@ -1,32 +1,27 @@
 package SR.Lab3.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
 import java.util.Set;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name = "study_groups")
 @AttributeOverride(name = "id", column = @Column(name = "`gr_id`"))
 public class Group extends AbstractEntity {
+
     @Column(unique = true)
     private String grName;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "group", cascade = {CascadeType.ALL}, orphanRemoval = true)
-    private Set<Student> students;
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "faculty_id")
-    private Faculty faculty;
 
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<Student> students;
+
+    @ManyToOne
+    @JoinColumn(name = "faculty_id")
+    @JsonBackReference
+    private Faculty faculty;
 
 
     public String getGrName() {
