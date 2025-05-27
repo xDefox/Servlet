@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,8 +25,8 @@ public class Faculty extends AbstractEntity {
     private String phone;
 
     @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Set<Group> groups;
+    @JsonManagedReference("faculty-groups")
+    private Set<Group> groups = new HashSet<>(); // Используем Set вместо List
 
     // Конструкторы
     public Faculty() {}
@@ -60,14 +61,13 @@ public class Faculty extends AbstractEntity {
         this.phone = phone;
     }
 
-    public List<Group> getGroups() {
-        return (List<Group>) groups;
+    public Set<Group> getGroups() {
+        return groups;
     }
 
-    public void setGroups(List<Group> groups) {
-        this.groups = (Set<Group>) groups;
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
-
     // Методы для управления связями
     public void addGroup(Group group) {
         groups.add(group);
