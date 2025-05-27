@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "api/group", produces = MediaType.APPLICATION_JSON_VALUE)
-public class GroupController extends AbstractController<Group>{
+public class GroupController extends AbstractController<Group> {
     @Autowired
     private GroupService service;
 
@@ -20,15 +20,17 @@ public class GroupController extends AbstractController<Group>{
         return service;
     }
 
+    // Доступ для USER и ADMIN
     @GetMapping("/name/{name}")
     public ResponseEntity<Group> getStudentsBySurname(@PathVariable String name) {
-        Group group = service.readByName (name);
+        Group group = service.readByName(name);
         if (group == null) {
-            return new ResponseEntity<>(HttpStatus. NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(group, headers, HttpStatus.OK);
     }
 
+    // Доступ для USER и ADMIN
     @GetMapping("/{id}")
     public ResponseEntity<Group> getById(@PathVariable long id) {
         Group entity = service.read(id);
@@ -38,20 +40,23 @@ public class GroupController extends AbstractController<Group>{
         return new ResponseEntity<>(entity, HttpStatus.OK);
     }
 
+    // Только для ADMIN
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> put(@RequestBody Group entity) {
         service.save(entity);
-        return new ResponseEntity<>(HttpStatus. CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    // Только для ADMIN
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')") // Изменили все hasRole на hasAuthority
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> post(@RequestBody Group entity) {
         service.save(entity);
-        return new ResponseEntity<> (HttpStatus. OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // Только для ADMIN
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable long id) {

@@ -3,6 +3,7 @@ package SR.Lab3.config;
 import SR.Lab3.security.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -26,16 +27,17 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // Будет искать ROLE_ADMIN
-                        .requestMatchers("/api/group/**").hasAnyRole("ADMIN", "USER") // ROLE_ADMIN или ROLE_USER // User должен иметь доступ
+                        .requestMatchers(HttpMethod.GET, "/api/group/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/group/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/group/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/group/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .csrf(csrf -> csrf.disable())
-                .httpBasic(Customizer.withDefaults());
+                .httpBasic(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
