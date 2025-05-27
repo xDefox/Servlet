@@ -33,10 +33,10 @@ public class GroupController extends AbstractController<Group>{
     public ResponseEntity<Group> getById(@PathVariable long id) {
         Group entity = service.read(id);
         if (entity == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(entity, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(entity, HttpStatus.OK);
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

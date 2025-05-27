@@ -45,7 +45,7 @@ public class StudentController extends AbstractController<Student>{
     public ResponseEntity<String> put(@RequestBody Student entity){
         service.save(entity);
         return new ResponseEntity<>(HttpStatus.CREATED);
-        }
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
