@@ -16,7 +16,7 @@ public class Student extends AbstractEntity { // Предполагаем, чт�
     private String phoneNumber;
 
     @ManyToOne(fetch = FetchType.LAZY) // Рекомендуется LAZY для ManyToOne
-    @JoinColumn(name = "group_id")
+    @JoinColumn(name = "gr_id")
     @JsonBackReference("group-students") // <--- ИСПРАВЛЕНО: Указано имя, совпадающее с Group
     private Group group;
 

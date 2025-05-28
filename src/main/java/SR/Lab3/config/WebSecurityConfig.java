@@ -27,10 +27,10 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/group/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/group/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/group/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/group/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/group/**", "/api/student/**", "/api/faculty/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/group/**", "/api/student/**", "/api/faculty/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/group/**", "/api/student/**", "/api/faculty/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/group/**", "/api/student/**", "/api/faculty/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
