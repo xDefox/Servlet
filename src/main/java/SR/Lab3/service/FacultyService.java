@@ -6,8 +6,8 @@ import java.util.List;
 public interface FacultyService {
     List<Faculty> readAll();
     Faculty read(long id);
-    void save(Faculty faculty);
+    Faculty save(Faculty faculty);
     void delete(long id);
     Faculty readByName(String name);
-    void update(Faculty faculty);
+    Faculty update(Faculty faculty);
 }

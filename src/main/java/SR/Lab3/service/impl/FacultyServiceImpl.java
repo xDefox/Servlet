@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,9 +31,10 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public void save(Faculty faculty) {
+    public Faculty save(Faculty faculty) {
         validateFaculty(faculty);
         repository.save(faculty);
+        return faculty;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public void update(Faculty faculty) {
+    public Faculty update(Faculty faculty) {
         Faculty existing = repository.findById(faculty.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Faculty not found"));
 
@@ -63,6 +63,7 @@ public class FacultyServiceImpl implements FacultyService {
         existing.setName(faculty.getName());
         existing.setPhone(faculty.getPhone());
         repository.save(existing);
+        return existing;
     }
 
     private void validateFaculty(Faculty faculty) {
