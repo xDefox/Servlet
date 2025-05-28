@@ -2,6 +2,7 @@ package SR.Lab3.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -12,16 +13,21 @@ import java.util.Set;
 public class Group extends AbstractEntity {
 
     @Column(unique = true)
+    @JsonProperty("gr_name")
     private String grName;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("group-students")
     private Set<Student> students;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // Рекомендуется LAZY для ManyToOne
     @JoinColumn(name = "faculty_id")
-    @JsonBackReference
+    @JsonBackReference("faculty-groups") // <--- ИСПРАВЛЕНО: Указано имя, совпадающее с Faculty
     private Faculty faculty;
+
+    @Transient
+    @JsonProperty(value = "faculty_id", access = JsonProperty.Access.WRITE_ONLY) // Только для записи из JSON
+    private Long facultyIdInput;
 
 
     public String getGrName() {
@@ -50,7 +56,8 @@ public class Group extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "GROUP - " + id + ": [name=" + grName +
-                ", studentsCount=" + (students != null ? students.size() : 0) + "]";
+        return "GROUP - " + (id != null ? id : "null_id") + ": [name=" + grName + // Проверка на null для id, если он из AbstractEntity
+                ", studentsCount=" + (students != null ? students.size() : 0) +
+                ", facultyId=" + (faculty != null && faculty.getId() != null ? faculty.getId() : "null") + "]"; // Добавил facultyId в toString
     }
 }

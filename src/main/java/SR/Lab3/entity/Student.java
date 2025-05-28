@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "students")
-public class Student extends AbstractEntity {
+public class Student extends AbstractEntity { // Предполагаем, что Student тоже наследуется
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -15,9 +15,9 @@ public class Student extends AbstractEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // Рекомендуется LAZY для ManyToOne
     @JoinColumn(name = "group_id")
-    @JsonBackReference
+    @JsonBackReference("group-students") // <--- ИСПРАВЛЕНО: Указано имя, совпадающее с Group
     private Group group;
 
 
@@ -55,6 +55,7 @@ public class Student extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Student - " + id + ": [name=" + name + ", surname=" + surname + ", phoneNumber=" + phoneNumber + "]";
+        return "Student - " + (id != null ? id : "null_id") + ": [name=" + name + ", surname=" + surname + ", phoneNumber=" + phoneNumber +
+                ", groupId=" + (group != null && group.getId() != null ? group.getId() : "null") + "]"; // Добавил groupId в toString
     }
 }

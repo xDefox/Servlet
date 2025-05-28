@@ -27,7 +27,7 @@ public class GroupController extends AbstractController<Group> {
         if (group == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(group, headers, HttpStatus.OK);
+        return new ResponseEntity<>(group, HttpStatus.OK);
     }
 
     // Доступ для USER и ADMIN
@@ -49,7 +49,7 @@ public class GroupController extends AbstractController<Group> {
     }
 
     // Только для ADMIN
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')") // Изменили все hasRole на hasAuthority
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> post(@RequestBody Group entity) {
         service.save(entity);

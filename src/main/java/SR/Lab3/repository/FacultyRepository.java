@@ -6,5 +6,6 @@ import java.util.Optional;
 
 public interface FacultyRepository extends JpaRepository<Faculty, Long> {
     Optional<Faculty> findByName(String name);
+    Optional<Faculty> findByPhone(String phone);
     boolean existsByName(String name);
 }
